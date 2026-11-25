@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Miguel Leguizamo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/* VOICE: confident, clean, a student builder showing what he can do — little copy, lots of light.
+   IDEA: the page behaves like a running program: a live 3D "core" of his stack, a boot terminal, modules that load in.
+   PICTURE: an interactive wireframe sphere of points carrying his languages, drag to spin, reacting to the cursor.
+   COLOUR and TYPE: pure black, ice white ink, one electric cyan accent with an iridescent edge on the name; Space Grotesk + JetBrains Mono for code.
+   LAYOUT: full-bleed black, hero with name over the sphere, then modules in a grid, terminal for projects, contact console, footer. */
+:root{color-scheme:dark;--bg:#030405;--bg2:#0a0d10;--ink:#eef2f6;--mute:#8a96a3;--line:#1b2229;--ac:#5ef0ff;--ac2:#b9a8ff;--ac3:#ffffff}
+*{box-sizing:border-box;min-width:0}
+html{scroll-behavior:smooth;scroll-padding-top:72px}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 "Space Grotesk",system-ui,sans-serif;overflow-x:clip}
+a{color:inherit}
+.mono{font-family:"JetBrains Mono",ui-monospace,monospace}
+#grid{position:fixed;inset:0;z-index:0;pointer-events:none;background:
+ linear-gradient(transparent 0 calc(100% - 1px),rgba(94,240,255,.05) 0) 0 0/56px 56px,
+ linear-gradient(90deg,transparent 0 calc(100% - 1px),rgba(94,240,255,.05) 0) 0 0/56px 56px;
+ mask:radial-gradient(ellipse at 50% 30%,#000 10%,transparent 70%)}
+#glow{position:fixed;width:560px;height:560px;border-radius:50%;pointer-events:none;z-index:0;left:0;top:0;
+ background:radial-gradient(circle,rgba(94,240,255,.10),transparent 60%);transform:translate(-50%,-50%)}
+main,header,footer{position:relative;z-index:1}
+header{position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between;gap:12px;
+ padding:12px max(5vw,16px);background:rgba(3,4,5,.6);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.logo{font-weight:700;letter-spacing:.02em;text-decoration:none;display:flex;align-items:center;gap:10px}
+.logo b{display:grid;place-items:center;width:36px;height:36px;border:1px solid var(--ac);border-radius:10px;color:var(--ac);font-size:14px;box-shadow:0 0 18px rgba(94,240,255,.35) inset}
+nav{display:flex;gap:4px;flex-wrap:wrap;align-items:center}
+nav a{text-decoration:none;color:var(--mute);padding:10px 12px;border-radius:10px;font-size:15px}
+nav a:hover{color:var(--ink);background:var(--bg2)}
+.lang{display:flex;border:1px solid var(--line);border-radius:999px;padding:3px;background:var(--bg2)}
+.lang button{all:unset;cursor:pointer;padding:8px 13px;border-radius:999px;font:600 13px "JetBrains Mono",monospace;color:var(--mute);min-height:20px}
+.lang button[aria-pressed=true]{background:var(--ac);color:#001114}
+.lang button:focus-visible,.btn:focus-visible,nav a:focus-visible{outline:2px solid var(--ac);outline-offset:3px}
+.band{padding:clamp(48px,7vw,110px) max(5vw,16px);max-width:1240px;margin:0 auto}
+/* hero */
+.hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:clamp(20px,4vw,60px);align-items:center;min-height:calc(100svh - 62px);padding-top:24px;padding-bottom:24px}
+.status{display:inline-flex;align-items:center;gap:10px;font-size:13px;color:var(--mute);border:1px solid var(--line);padding:7px 14px;border-radius:999px;background:var(--bg2)}
+.dot{width:8px;height:8px;border-radius:50%;background:#3dff9a;box-shadow:0 0 10px #3dff9a;animation:pulse 2s infinite}
+@keyframes pulse{50%{opacity:.35}}
+h1{font-size:clamp(48px,8.4vw,112px);line-height:.95;margin:22px 0 18px;letter-spacing:-.035em;font-weight:700}
+h1 span{display:block;background:linear-gradient(100deg,var(--ac3) 0%,var(--ac) 35%,var(--ac2) 65%,var(--ac3) 100%);background-size:220% 100%;
+ -webkit-background-clip:text;background-clip:text;color:transparent;animation:holo 7s linear infinite}
+@keyframes holo{to{background-position:-220% 0}}
+.tag{font-size:clamp(18px,2vw,22px);color:#c9d2db;max-width:34ch;margin:0 0 22px;text-wrap:balance}
+.typed{font-size:15px;color:var(--ac);min-height:24px;margin-bottom:30px}
+.typed::after{content:"▋";margin-left:3px;animation:pulse 1s steps(1) infinite}
+.cta{display:flex;gap:12px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:10px;min-height:48px;padding:0 22px;border-radius:14px;text-decoration:none;font-weight:600;border:1px solid var(--line);background:var(--bg2);cursor:pointer;color:var(--ink);font-size:16px;font-family:inherit;transition:transform .2s,border-color .2s,box-shadow .2s}
+.btn:hover{border-color:var(--ac);box-shadow:0 0 24px rgba(94,240,255,.25)}
+.btn.pri{background:var(--ac);color:#001114;border-color:var(--ac)}
+.fig{position:relative;aspect-ratio:1;width:100%;max-width:640px;justify-self:center}
+.fig canvas{position:absolute;inset:0;width:100%;height:100%;cursor:grab}
+.fig canvas:active{cursor:grabbing}
+.fig::before{content:"";position:absolute;inset:12%;border-radius:50%;background:radial-gradient(circle,rgba(94,240,255,.16),transparent 65%);filter:blur(10px)}
+.hint{position:absolute;bottom:4%;left:50%;transform:translateX(-50%);font-size:12px;color:var(--mute);white-space:nowrap}
+/* sections */
+.kicker{color:var(--ac);font-size:14px;margin:0 0 10px}
+h2{font-size:clamp(32px,4.4vw,52px);line-height:1.05;margin:0 0 18px;letter-spacing:-.025em;text-wrap:balance}
+.lead{color:#c3ccd5;max-width:62ch;font-size:17px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr));gap:16px;margin-top:36px}
+.card{position:relative;padding:26px;border:1px solid var(--line);border-radius:20px;background:linear-gradient(180deg,#0b0f13,#06080a);overflow:hidden;transition:border-color .3s,transform .3s}
+.card::before{content:"";position:absolute;inset:0;background:radial-gradient(380px circle at var(--x,50%) var(--y,0%),rgba(94,240,255,.13),transparent 45%);opacity:0;transition:opacity .3s}
+.card:hover{border-color:#2a3a44;transform:translateY(-4px)}.card:hover::before{opacity:1}
+.card>*{position:relative}
+.card h3{margin:14px 0 6px;font-size:21px}
+.card p{margin:0;color:var(--mute);font-size:15px}
+.ico{width:46px;height:46px;border-radius:12px;display:grid;place-items:center;background:rgba(94,240,255,.08);border:1px solid rgba(94,240,255,.25);color:var(--ac)}
+.ico svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.about{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:clamp(24px,5vw,70px);align-items:start}
+.facts{display:grid;gap:12px}
+.fact{display:flex;gap:16px;align-items:center;padding:18px 20px;border:1px solid var(--line);border-radius:16px;background:var(--bg2)}
+.fact small{display:block;color:var(--mute);font-size:13px}
+.fact strong{font-size:17px}
+.stack{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr));gap:14px;margin-top:36px}
+.chip{padding:22px 20px;border:1px solid var(--line);border-radius:18px;background:var(--bg2);transition:border-color .3s,box-shadow .3s}
+.chip:hover{border-color:var(--c);box-shadow:0 0 30px -8px var(--c)}
+.chip .n{font-size:22px;font-weight:700}
+.chip .t{font-size:13px;color:var(--mute)}
+.chip i{display:block;width:28px;height:3px;border-radius:3px;background:var(--c);margin-bottom:16px;box-shadow:0 0 12px var(--c)}
+.term{margin-top:36px;border:1px solid var(--line);border-radius:18px;background:#05070a;overflow:hidden;box-shadow:0 30px 80px -40px rgba(94,240,255,.35)}
+.term .bar{display:flex;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid var(--line);font-size:13px;color:var(--mute)}
+.term .bar i{width:11px;height:11px;border-radius:50%;background:#2a3138}
+.term .bar i:nth-child(1){background:#ff5f57}.term .bar i:nth-child(2){background:#febc2e}.term .bar i:nth-child(3){background:#28c840}
+.term pre{margin:0;padding:22px;font:14px/1.75 "JetBrains Mono",monospace;color:#c9d2db;min-height:290px;white-space:pre-wrap;overflow-wrap:anywhere}
+.term .p{color:var(--ac)}.term .ok{color:#3dff9a}.term .w{color:#febc2e}
+.road{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));gap:16px;margin-top:36px;counter-reset:r}
+.step{padding:24px;border-left:2px solid var(--line);position:relative}
+.step::before{content:"";position:absolute;left:-7px;top:28px;width:12px;height:12px;border-radius:50%;background:var(--bg);border:2px solid var(--ac);box-shadow:0 0 12px var(--ac)}
+.step h3{margin:0 0 6px;font-size:19px}.step p{margin:0;color:var(--mute);font-size:15px}
+.contact{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:16px;margin-top:36px}
+.cbox{display:flex;align-items:center;gap:16px;padding:22px;border:1px solid var(--line);border-radius:20px;background:var(--bg2);flex-wrap:wrap}
+.cbox .v{font-size:17px;font-weight:600;overflow-wrap:anywhere}
+.cbox small{display:block;color:var(--mute);font-size:13px}
+.cbox .grow{flex:1 1 160px}
+.cbox .acts{display:flex;gap:8px}
+.cbox .btn{min-height:44px;padding:0 14px;font-size:14px}
+footer{border-top:1px solid var(--line);padding:28px max(5vw,16px);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;color:var(--mute);font-size:14px}
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .8s ease,transform .8s ease}
+.reveal.in{opacity:1;transform:none}
+#toast{position:fixed;bottom:24px;left:50%;transform:translate(-50%,30px);opacity:0;background:var(--ac);color:#001114;padding:12px 20px;border-radius:12px;font-weight:600;z-index:20;transition:.3s;pointer-events:none}
+#toast.on{opacity:1;transform:translate(-50%,0)}
+@media(max-width:900px){.hero{grid-template-columns:1fr;min-height:0;text-align:left}.fig{max-width:460px;order:-1}.about{grid-template-columns:1fr}nav a.hide{display:none}}
+@media(max-width:600px){nav a{display:none}.fig{max-width:340px}h1{margin-top:16px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.reveal{opacity:1;transform:none}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<div id="grid"></div><div id="glow"></div>
+<header>
+ <a class="logo" href="#top"><b class="mono">ML</b><span>Miguel Leguizamo</span></a>
+ <nav>
+  <a href="#sobre" class="hide" data-i="n1">Sobre mí</a>
+  <a href="#stack" class="hide" data-i="n2">Stack</a>
+  <a href="#proyectos" class="hide" data-i="n3">Proyectos</a>
+  <a href="#contacto" data-i="n4">Contacto</a>
+  <div class="lang" role="group" aria-label="Idioma / Language">
+   <button id="es" aria-pressed="true">ES</button><button id="en" aria-pressed="false">EN</button>
+  </div>
+ </nav>
+</header>
+
+<main id="top">
+<section class="band hero">
+ <div>
+  <div class="status mono"><span class="dot"></span><span data-i="st">Disponible para proyectos y prácticas</span></div>
+  <h1>Miguel<span>Leguizamo</span></h1>
+  <p class="tag" data-i="tag">Futuro ingeniero de sistemas que convierte ideas en software: web, apps y datos.</p>
+  <div class="typed mono" id="typed">&gt; </div>
+  <div class="cta">
+   <a class="btn pri" href="#contacto" data-i="c1">Hablemos</a>
+   <a class="btn" href="#stack" data-i="c2">Ver mi stack</a>
+  </div>
+ </div>
+ <div class="fig"><canvas id="core" aria-label="Esfera 3D interactiva con las tecnologías que manejo"></canvas><span class="hint mono" data-i="hint">arrastra para girar</span></div>
+</section>
+
+<section class="band reveal" id="sobre">
+ <div class="about">
+  <div>
+   <p class="kicker mono">// 01 · about</p>
+   <h2 data-i="a_t">Me gusta construir cosas que funcionen y se vean bien.</h2>
+   <p class="lead" data-i="a_p1">Estudio Ingeniería de Sistemas en la Pontificia Universidad Javeriana, en Bogotá. Lo que más me emociona es el desarrollo: tomar una idea, diseñar cómo debería funcionar y llevarla a una página web o una aplicación que alguien pueda usar.</p>
+   <p class="lead" data-i="a_p2">Me muevo entre el frontend, la lógica de programación y las bases de datos, y aprendo algo nuevo en cada proyecto.</p>
+  </div>
+  <div class="facts">
+   <div class="fact"><div class="ico"><svg viewBox="0 0 24 24"><path d="M3 9l9-5 9 5-9 5-9-5z"/><path d="M7 11v5c3 2 7 2 10 0v-5"/></svg></div><div><small data-i="f1s">Universidad</small><strong>Pontificia Universidad Javeriana</strong></div></div>
+   <div class="fact"><div class="ico"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg></div><div><small data-i="f2s">Carrera</small><strong data-i="f2">Ingeniería de Sistemas</strong></div></div>
+   <div class="fact"><div class="ico"><svg viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11a7 7 0 0114 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></div><div><small data-i="f3s">Ciudad</small><strong>Bogotá, Colombia</strong></div></div>
+   <div class="fact"><div class="ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14.5 0 18M12 3c-3 3.5-3 14.5 0 18"/></svg></div><div><small data-i="f4s">Idiomas</small><strong data-i="f4">Español (nativo) · Inglés</strong></div></div>
+  </div>
+ </div>
+</section>
+
+<section class="band reveal">
+ <p class="kicker mono">// 02 · focus</p>
+ <h2 data-i="w_t">Lo que construyo</h2>
+ <div class="cards" id="cards"></div>
+</section>
+
+<section class="band reveal" id="stack">
+ <p class="kicker mono">// 03 · stack</p>
+ <h2 data-i="s_t">Mi caja de herramientas</h2>
+ <p class="lead" data-i="s_p">Los lenguajes y tecnologías con los que programo hoy.</p>
+ <div class="stack" id="chips"></div>
+</section>
+
+<section class="band reveal" id="proyectos">
+ <p class="kicker mono">// 04 · projects</p>
+ <h2 data-i="p_t">Proyectos en compilación</h2>
+ <p class="lead" data-i="p_p">Estoy preparando mis primeros proyectos públicos. Muy pronto vas a poder verlos aquí.</p>
+ <div class="term"><div class="bar"><i></i><i></i><i></i><span style="margin-left:8px">miguel@javeriana: ~/proyectos</span></div><pre id="term"></pre></div>
+</section>
+
+<section class="band reveal">
+ <p class="kicker mono">// 05 · roadmap</p>
+ <h2 data-i="r_t">Hacia dónde voy</h2>
+ <div class="road" id="road"></div>
+</section>
+
+<section class="band reveal" id="contacto">
+ <p class="kicker mono">// 06 · contact</p>
+ <h2 data-i="k_t">¿Construimos algo juntos?</h2>
+ <p class="lead" data-i="k_p">Escríbeme para proyectos, prácticas o simplemente para hablar de tecnología.</p>
+ <div class="contact">
+  <div class="cbox"><div class="ico"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></div>
+   <div class="grow"><small data-i="k1">Correo</small><div class="v">miguelaleguizamor@gmail.com</div></div>
+   <div class="acts"><button class="btn" data-copy="miguelaleguizamor@gmail.com" data-i="cp">Copiar</button><a class="btn pri" href="mailto:miguelaleguizamor@gmail.com" data-i="k1b">Escribir</a></div></div>
+  <div class="cbox"><div class="ico"><svg viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z"/></svg></div>
+   <div class="grow"><small data-i="k2">Teléfono / WhatsApp</small><div class="v">+57 321 396 3120</div></div>
+   <div class="acts"><button class="btn" data-copy="+573213963120" data-i="cp">Copiar</button><a class="btn pri" href="https://wa.me/573213963120">WhatsApp</a></div></div>
+ </div>
+</section>
+</main>
+
+<footer><span>© <span id="yr"></span> Miguel Leguizamo</span><span class="mono" data-i="ft">Hecho con código y café · Bogotá</span></footer>
+<div id="toast"></div>
+
+<script>
+{
+const T={
+es:{n1:"Sobre mí",n2:"Stack",n3:"Proyectos",n4:"Contacto",st:"Disponible para proyectos y prácticas",tag:"Futuro ingeniero de sistemas que convierte ideas en software: web, apps y datos.",c1:"Hablemos",c2:"Ver mi stack",hint:"arrastra para girar",
+a_t:"Me gusta construir cosas que funcionen y se vean bien.",a_p1:"Estudio Ingeniería de Sistemas en la Pontificia Universidad Javeriana, en Bogotá. Lo que más me emociona es el desarrollo: tomar una idea, diseñar cómo debería funcionar y llevarla a una página web o una aplicación que alguien pueda usar.",a_p2:"Me muevo entre el frontend, la lógica de programación y las bases de datos, y aprendo algo nuevo en cada proyecto.",
+f1s:"Universidad",f2s:"Carrera",f2:"Ingeniería de Sistemas",f3s:"Ciudad",f4s:"Idiomas",f4:"Español (nativo) · Inglés",
+w_t:"Lo que construyo",s_t:"Mi caja de herramientas",s_p:"Los lenguajes y tecnologías con los que programo hoy.",
+p_t:"Proyectos en compilación",p_p:"Estoy preparando mis primeros proyectos públicos. Muy pronto vas a poder verlos aquí.",r_t:"Hacia dónde voy",
+k_t:"¿Construimos algo juntos?",k_p:"Escríbeme para proyectos, prácticas o simplemente para hablar de tecnología.",k1:"Correo",k1b:"Escribir",k2:"Teléfono / WhatsApp",cp:"Copiar",ft:"Hecho con código y café · Bogotá",copied:"¡Copiado!",
+roles:["Desarrollador web","Desarrollador de aplicaciones","Bases de datos y SQL","Estudiante de Ing. de Sistemas @ Javeriana"],
+cards:[["web","Desarrollo web","Páginas y sitios con HTML y CSS: rápidos, claros y que se adaptan a cualquier pantalla."],["app","Aplicaciones","Programas con Java, C++ y Python, desde la lógica hasta que el usuario los tenga en sus manos."],["db","Bases de datos","Diseño de bases de datos y consultas SQL para guardar y organizar la información."],["logic","Lógica y algoritmos","Resolver problemas paso a paso, con código limpio y estructurado."]],
+chips:[["Java","Programación orientada a objetos","#ff9f43"],["C++","Rendimiento y estructuras de datos","#5ea8ff"],["Python","Scripts, automatización y lógica","#ffd84d"],["HTML / CSS","Estructura y diseño web","#ff6b81"],["SQL","Consultas y manejo de datos","#5ef0ff"],["Bases de datos","Modelado relacional","#3dff9a"]],
+road:[["Hoy","Fortaleciendo Java, C++, Python, SQL y desarrollo web en la carrera."],["Próximo","Publicar mis primeros proyectos en GitHub y mostrarlos aquí."],["Siguiente","Sumar JavaScript y frameworks modernos para webs y apps más completas."],["Meta","Crear productos de software que la gente use todos los días."]],
+term:[["p","$ ./build --portfolio"],["","Inicializando entorno de Miguel..."],["ok","✓ Java · C++ · Python cargados"],["ok","✓ HTML/CSS listos"],["ok","✓ Conexión a base de datos (SQL) establecida"],["w","⧗ Compilando proyecto_01..."],["w","⧗ Compilando proyecto_02..."],["","Progreso: [████████████░░░░░░░░] 60%"],["p","$ echo \"Próximamente nuevos proyectos 🚀\""]]},
+en:{n1:"About",n2:"Stack",n3:"Projects",n4:"Contact",st:"Open to projects and internships",tag:"Future systems engineer turning ideas into software: web, apps and data.",c1:"Let's talk",c2:"See my stack",hint:"drag to spin",
+a_t:"I like building things that work and look good.",a_p1:"I study Systems Engineering at Pontificia Universidad Javeriana in Bogotá. What excites me most is development: taking an idea, designing how it should work and turning it into a website or an app people can actually use.",a_p2:"I move between frontend, programming logic and databases, and I learn something new with every project.",
+f1s:"University",f2s:"Major",f2:"Systems Engineering",f3s:"City",f4s:"Languages",f4:"Spanish (native) · English",
+w_t:"What I build",s_t:"My toolbox",s_p:"The languages and technologies I code with today.",
+p_t:"Projects compiling",p_p:"I'm getting my first public projects ready. You'll be able to see them here very soon.",r_t:"Where I'm heading",
+k_t:"Shall we build something together?",k_p:"Reach out about projects, internships or just to talk tech.",k1:"Email",k1b:"Write",k2:"Phone / WhatsApp",cp:"Copy",ft:"Made with code and coffee · Bogotá",copied:"Copied!",
+roles:["Web developer","App developer","Databases & SQL","Systems Engineering student @ Javeriana"],
+cards:[["web","Web development","Pages and sites with HTML and CSS: fast, clear and responsive on any screen."],["app","Applications","Programs in Java, C++ and Python, from the logic to the moment users have them in hand."],["db","Databases","Database design and SQL queries to store and organize information."],["logic","Logic & algorithms","Solving problems step by step with clean, structured code."]],
+chips:[["Java","Object-oriented programming","#ff9f43"],["C++","Performance and data structures","#5ea8ff"],["Python","Scripting, automation and logic","#ffd84d"],["HTML / CSS","Web structure and design","#ff6b81"],["SQL","Queries and data handling","#5ef0ff"],["Databases","Relational modeling","#3dff9a"]],
+road:[["Now","Strengthening Java, C++, Python, SQL and web development in my degree."],["Next","Publish my first projects on GitHub and show them here."],["After","Add JavaScript and modern frameworks for richer websites and apps."],["Goal","Build software products people use every day."]],
+term:[["p","$ ./build --portfolio"],["","Initializing Miguel's environment..."],["ok","✓ Java · C++ · Python loaded"],["ok","✓ HTML/CSS ready"],["ok","✓ Database connection (SQL) established"],["w","⧗ Compiling project_01..."],["w","⧗ Compiling project_02..."],["","Progress: [████████████░░░░░░░░] 60%"],["p","$ echo \"New projects coming soon 🚀\""]]}
+};
+const ICONS={web:'<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M7 6.5h.01M10 6.5h.01"/>',app:'<rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 18.5h2"/>',db:'<ellipse cx="12" cy="5.5" rx="7" ry="2.5"/><path d="M5 5.5v13c0 1.4 3.1 2.5 7 2.5s7-1.1 7-2.5v-13M5 12c0 1.4 3.1 2.5 7 2.5s7-1.1 7-2.5"/>',logic:'<path d="M8 6l-5 6 5 6M16 6l5 6-5 6M14 4l-4 16"/>'};
+const $=s=>document.querySelector(s);
+let lang="es";try{lang=localStorage.getItem("ml-lang")||"es"}catch(e){}
+let typer,termTimer;
+function render(){
+ const L=T[lang];document.documentElement.lang=lang;
+ document.querySelectorAll("[data-i]").forEach(el=>{const k=el.dataset.i;if(L[k])el.textContent=L[k]});
+ $("#es").setAttribute("aria-pressed",lang==="es");$("#en").setAttribute("aria-pressed",lang==="en");
+ $("#cards").innerHTML=L.cards.map(c=>`<div class="card"><div class="ico"><svg viewBox="0 0 24 24">${ICONS[c[0]]}</svg></div><h3>${c[1]}</h3><p>${c[2]}</p></div>`).join("");
+ $("#chips").innerHTML=L.chips.map(c=>`<div class="chip" style="--c:${c[2]}"><i></i><div class="n">${c[0]}</div><div class="t">${c[1]}</div></div>`).join("");
+ $("#road").innerHTML=L.road.map(r=>`<div class="step"><h3>${r[0]}</h3><p>${r[1]}</p></div>`).join("");
+ startTyping();startTerm();
+}
+function setLang(l){lang=l;try{localStorage.setItem("ml-lang",l)}catch(e){}render()}
+$("#es").onclick=()=>setLang("es");$("#en").onclick=()=>setLang("en");
+const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+function startTyping(){
+ clearTimeout(typer);const el=$("#typed"),roles=T[lang].roles;let r=0,i=0,del=false;
+ if(reduce){el.textContent="> "+roles[0];return}
+ const tick=()=>{const w=roles[r];i+=del?-1:1;el.textContent="> "+w.slice(0,i);
+  let d=del?35:70;if(!del&&i===w.length){del=true;d=1600}else if(del&&i===0){del=false;r=(r+1)%roles.length;d=300}
+  typer=setTimeout(tick,d)};tick();
+}
+function startTerm(){
+ clearTimeout(termTimer);const pre=$("#term"),lines=T[lang].term;pre.textContent="";let n=0;
+ const add=()=>{if(n>=lines.length)return;const s=document.createElement("span");s.className=lines[n][0];s.textContent=lines[n][1]+"\n";pre.appendChild(s);n++;termTimer=setTimeout(add,reduce?0:520)};
+ const io=new IntersectionObserver(es=>{if(es[0].isIntersecting){add();io.disconnect()}},{threshold:.3});io.observe(pre);
+}
+// copy
+const toast=$("#toast");
+document.addEventListener("click",async e=>{const b=e.target.closest("[data-copy]");if(!b)return;
+ try{await navigator.clipboard.writeText(b.dataset.copy);toast.textContent=T[lang].copied}catch(err){toast.textContent=b.dataset.copy}
+ toast.classList.add("on");setTimeout(()=>toast.classList.remove("on"),1600)});
+// card spotlight + glow
+const glow=$("#glow");
+document.addEventListener("pointermove",e=>{glow.style.left=e.clientX+"px";glow.style.top=e.clientY+"px";
+ const c=e.target.closest(".card");if(c){const r=c.getBoundingClientRect();c.style.setProperty("--x",e.clientX-r.left+"px");c.style.setProperty("--y",e.clientY-r.top+"px")}});
+// reveal
+const rv=new IntersectionObserver(es=>es.forEach(x=>{if(x.isIntersecting){x.target.classList.add("in");rv.unobserve(x.target)}}),{threshold:.12});
+document.querySelectorAll(".reveal").forEach(el=>rv.observe(el));
+$("#yr").textContent=new Date().getFullYear();
+// 3D core
+const cv=$("#core"),ctx=cv.getContext("2d");
+const N=260,pts=[];for(let i=0;i<N;i++){const y=1-2*(i+.5)/N,r=Math.sqrt(1-y*y),t=i*2.39996;pts.push([Math.cos(t)*r,y,Math.sin(t)*r])}
+const words=["Java","C++","Python","HTML","CSS","SQL","DB","</>","{ }","Web","Apps","git"];
+const wp=words.map((w,i)=>{const y=1-2*(i+.5)/words.length,r=Math.sqrt(1-y*y),t=i*2.39996;return[Math.cos(t)*r*1.12,y*1.12,Math.sin(t)*r*1.12,w]});
+const links=[];for(let i=0;i<N;i++)for(let j=i+1;j<N;j++){const a=pts[i],b=pts[j];if((a[0]-b[0])**2+(a[1]-b[1])**2+(a[2]-b[2])**2<.045)links.push([i,j])}
+let ax=.35,ay=0,vx=0,vy=.004,drag=false,lx=0,ly=0,mx=0,my=0,W=0,H=0,dpr=1;
+function size(){dpr=Math.min(devicePixelRatio||1,2);W=cv.clientWidth;H=cv.clientHeight;cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0)}
+const ro=new ResizeObserver(size);ro.observe(cv);size();
+cv.addEventListener("pointerdown",e=>{drag=true;lx=e.clientX;ly=e.clientY;cv.setPointerCapture(e.pointerId)});
+cv.addEventListener("pointermove",e=>{const r=cv.getBoundingClientRect();mx=(e.clientX-r.left)/r.width-.5;my=(e.clientY-r.top)/r.height-.5;
+ if(drag){vy=(e.clientX-lx)*.0009;vx=(e.clientY-ly)*.0009;lx=e.clientX;ly=e.clientY}});
+cv.addEventListener("pointerup",()=>drag=false);cv.addEventListener("pointerleave",()=>{mx=my=0});
+function proj(p){const cx=Math.cos(ax),sx=Math.sin(ax),cy=Math.cos(ay),sy=Math.sin(ay);
+ let x=p[0]*cy+p[2]*sy,z=-p[0]*sy+p[2]*cy,y=p[1]*cx-z*sx;z=p[1]*sx+z*cx;
+ const R=Math.min(W,H)*.36,s=2.6/(2.6-z);return[W/2+x*R*s+mx*14,H/2+y*R*s+my*14,z,s]}
+let t0=0;
+function frame(t){
+ ctx.clearRect(0,0,W,H);
+ if(!drag){vy+=(.0035-vy)*.02;vx+=(0-vx)*.03}ay+=vy;ax+=vx;ax=Math.max(-1.2,Math.min(1.2,ax));
+ const P=pts.map(proj);
+ ctx.lineWidth=.6;
+ for(const[i,j]of links){const a=P[i],b=P[j],z=(a[2]+b[2])/2;ctx.strokeStyle=`rgba(94,240,255,${.05+(z+1)*.12})`;ctx.beginPath();ctx.moveTo(a[0],a[1]);ctx.lineTo(b[0],b[1]);ctx.stroke()}
+ const pulse=(t/1000)%1;
+ P.forEach((p,i)=>{const a=.25+(p[2]+1)*.37;const hot=Math.abs(pts[i][1]-(1-pulse*2))<.04;
+  ctx.fillStyle=hot?`rgba(255,255,255,${a+.3})`:`rgba(185,240,255,${a})`;ctx.beginPath();ctx.arc(p[0],p[1],(hot?2.2:1.3)*p[3],0,7);ctx.fill()});
+ // orbit ring
+ ctx.strokeStyle="rgba(185,168,255,.25)";ctx.lineWidth=1;ctx.beginPath();
+ for(let k=0;k<=64;k++){const a=k/64*Math.PI*2,q=proj([Math.cos(a)*1.35,Math.sin(t/3000)*.15,Math.sin(a)*1.35]);k?ctx.lineTo(q[0],q[1]):ctx.moveTo(q[0],q[1])}ctx.stroke();
+ const fs=Math.max(11,Math.min(W,H)*.033);
+ wp.map(w=>[proj(w),w[3]]).sort((a,b)=>a[0][2]-b[0][2]).forEach(([p,w])=>{const a=.15+(p[2]+1)*.42;
+  ctx.font=`600 ${fs*p[3]}px "JetBrains Mono",monospace`;ctx.textAlign="center";ctx.textBaseline="middle";
+  ctx.shadowColor="rgba(94,240,255,.8)";ctx.shadowBlur=p[2]>.3?12:0;ctx.fillStyle=`rgba(238,242,246,${a})`;ctx.fillText(w,p[0],p[1]);ctx.shadowBlur=0});
+ if(!reduce)requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+render();
+}
+</script>
+</body>
+</html>
